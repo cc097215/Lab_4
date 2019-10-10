@@ -1,37 +1,43 @@
-#define servo 9
+#define poten A0
 
 #define btn 8
 
 #define forwards 1
 #define backwards 2
 
+#define enA 9
+#define in1 6
+#define in2 7
+
 void setup() {
   Serial.begin(9600);
 
    pinMode(btn, INPUT);
-
+  
+   pinMode(enA, OUTPUT);
+   pinMode(in1, OUTPUT);
+   pinMode(in2, OUTPUT);
+  
    Serial.println("Set-up Program 3");
 }
 
 void loop() {
-
-  int potent = analogRead(servo);                    //reads potentiometer
-  int scalepotent = map(potent, 0, 1023, 0, 180);   //scale servo to motor (0-180)
+  
+  int potent = analogRead(poten);                    //reads potentiometer
+  int scalepotent = map(potent, 0, 1023, 0, 255);   //scale servo to motor (0-180)
   int btnstate = digitalRead(btn);                   //Read button
   
   Serial.println(scalepotent);                      //Debug print for potentiometer
-
-  if (btnstate == HIGH){                           //Button is pressed
-    Serial.println("Shift");
-    //scalepotent = scalepotent * -1;                 //Reverses speed
-    //analogWrite(servo, scalepotent);                //Turn motor with potentiometer
-    delay(100);                                     //Give time to shift directions
+  if (btnstate == true){
+  delay(25);      
+  Serial.println("SHIFT");                        //Debug print for button
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
   }
-
-  else {                                            //Button isn't pressed
-    Serial.println("No Shift");
-    //analogWrite(servo,scalepotent);                 //Speed like normal
+  else {
+  Serial.println("NO SHIFT");
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
   }
-  
-  delay(10);                              
 }
+

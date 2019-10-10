@@ -19,8 +19,8 @@ void setup() {
  
   //myservo.attach(servo); //Attach servo to pin 9
 
-  pinMode(btn1, OUTPUT);
-  pinMode(btn2, OUTPUT);
+  pinMode(btn1, INPUT);
+  pinMode(btn2, INPUT);
 
   Serial.println("Set-up");
 }

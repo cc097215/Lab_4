@@ -31,10 +31,6 @@ void loop() {
   
   int btn1state = digitalRead(btn1);            //Direction Button
   int btn2state = digitalRead(btn2);            //Speed Button
-  /*
-  potent = analogRead(servo)                    //reads potentiometer
-  scalepotent = map(potent, 0, 1023, 0, 180);   //scale servo to motor (0-180)
-  */
 
   //Speed Array Shift
   if (btn2state == HIGH){               //Button 2 Pressed

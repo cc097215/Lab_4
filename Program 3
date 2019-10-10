@@ -1,41 +1,37 @@
-#include <Servo.h>  //Library
 #define servo 9
-Servo myservo;     //Servo Setup
 
 #define btn 8
 
+#define forwards 1
+#define backwards 2
+
 void setup() {
   Serial.begin(9600);
-  //myservo.attach(servo); //Attach to Pin 9
 
-  pinMode(btn, OUTPUT);
+   pinMode(btn, INPUT);
+
+   Serial.println("Set-up Program 3");
 }
 
 void loop() {
-  /*
+
   int potent = analogRead(servo);                    //reads potentiometer
   int scalepotent = map(potent, 0, 1023, 0, 180);   //scale servo to motor (0-180)
-  */
-  int btnstate = digitalRead(btn);
-  static int lastbtnstate;
+  int btnstate = digitalRead(btn);                   //Read button
+  
+  Serial.println(scalepotent);                      //Debug print for potentiometer
 
-  if (btnstate != lastbtnstate){              //
-    Serial.println("Delay");
-    lastbtnstate = btnstate;
-    //delay(100);
+  if (btnstate == HIGH){                           //Button is pressed
+    Serial.println("Shift");
+    //scalepotent = scalepotent * -1;                 //Reverses speed
+    //analogWrite(servo, scalepotent);                //Turn motor with potentiometer
+    delay(100);                                     //Give time to shift directions
   }
-  else if(btnstate == LOW){
-    Serial.println("Forwards");
-    //myservo.write(scalepotent);                  //Sends position to servo
-    lastbtnstate = btnstate;
-    
+
+  else {                                            //Button isn't pressed
+    Serial.println("No Shift");
+    //analogWrite(servo,scalepotent);                 //Speed like normal
   }
-  else if(btnstate == HIGH){
-    Serial.println("Backwards");
-    /*
-    scalepotent = -1 * scalepotent;
-    myservo.write(scalepotent);
-    */
-    lastbtnstate = btnstate;  
-  }
+  
+  delay(10);                              
 }

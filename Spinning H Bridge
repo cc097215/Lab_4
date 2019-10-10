@@ -1,0 +1,19 @@
+#define enA 9
+#define in1 6
+#define in2 7
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(enA, OUTPUT);
+   pinMode(in1, OUTPUT);
+   pinMode(in2, OUTPUT);
+  
+   Serial.println("Set-up Pre-Program 3");
+}
+
+void loop() {
+  
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+
+}

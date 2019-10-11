@@ -1,13 +1,10 @@
 #define poten A0
 
-#define btn 8
+#define btn 6
 
-#define forwards 1
-#define backwards 2
-
-#define enA 9
-#define in1 6
-#define in2 7
+#define enA 10
+#define in1 9
+#define in2 8
 
 void setup() {
   Serial.begin(9600);
@@ -22,22 +19,34 @@ void setup() {
 }
 
 void loop() {
+  static int prevbtnstate = false;
   
-  int potent = analogRead(poten);                    //reads potentiometer
-  int scalepotent = map(potent, 0, 1023, 0, 255);   //scale servo to motor (0-180)
-  int btnstate = digitalRead(btn);                   //Read button
+  int potent = analogRead(poten);                   //Reads potentiometer
+  int anpotent = potent/4;                          //Convert
+  Serial.println(anpotent);                         //Debug print for potentiometer
+
+  int btnstate = digitalRead(btn);                  //Read button
+  if (prevbtnstate != btnstate){                   //Direction Change Delay
+    delay(250);
+  }
+
+  analogWrite(enA, anpotent);                       //Send speed to h-bridge
   
-  Serial.println(scalepotent);                      //Debug print for potentiometer
-  if (btnstate == true){
-  delay(25);      
-  Serial.println("SHIFT");                        //Debug print for button
-  digitalWrite(in1, HIGH);
+  if (btnstate == true){                            //Button Presssed 
+  Serial.println("SHIFT");                          //Debug print for button pressed
+  prevbtnstate = true;
+  
+  digitalWrite(in1, HIGH);                          //Forwards Motion to H-Bridge
   digitalWrite(in2, LOW);
   }
+  
   else {
-  Serial.println("NO SHIFT");
-  digitalWrite(in1, LOW);
+  Serial.println("NO SHIFT");                      //Debug print for button not pressed
+  prevbtnstate = false;
+  
+  digitalWrite(in1, LOW);                         //Backwards Motion to H-Bridge
   digitalWrite(in2, HIGH);
   }
-}
 
+  delay(150)                                      //Covers for possible bounce
+}

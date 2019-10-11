@@ -27,7 +27,7 @@ void loop() {
 
   int btnstate = digitalRead(btn);                  //Read button
   if (prevbtnstate != btnstate){                   //Direction Change Delay
-    delay(250);
+    delay(100);
   }
 
   analogWrite(enA, anpotent);                       //Send speed to h-bridge
@@ -48,5 +48,5 @@ void loop() {
   digitalWrite(in2, HIGH);
   }
 
-  delay(150)                                      //Covers for possible bounce
+  delay(100);                                      //Covers for possible bounce
 }

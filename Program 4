@@ -1,50 +1,66 @@
 
-#define btn 8 //Button Pin 8
-
 #define off 0
 #define mid 1
 #define high 2
 
+#define midspeed 200
+#define highspeed 255
+
+#define btn 6
+
+#define enA 10
+#define in1 9
+#define in2 8
+
 void setup() {
   Serial.begin(9600);
-  //myservo.attach(servo); //Attach to Pin 9
   
-  pinMode(btn, OUTPUT);
+  pinMode(btn, INPUT);
+  pinMode(btn, INPUT);
+  
+   pinMode(enA, OUTPUT);
+   pinMode(in1, OUTPUT);
+   pinMode(in2, OUTPUT);
+  
+   Serial.println("Set-up Program 4");
 }
 
 void loop() {
   static int myspeed[] = {off, mid, high};    //Speed State Array
   static int speedpos = 0;                    //Sets where in speed array
-  /*
-  int potent = analogRead(servo);                    //reads potentiometer
-  int scalepotent = map(potent, 0, 1023, 0, 180);   //scale servo to motor (0-180)
-  */
+  int btnstate = digitalRead(btn);            //Read Button
 
-  int btnstate = digitalRead(btn);
-
-  //Speed Array
+  //Shift through Speed Array
   if(btnstate == HIGH){
     if (speedpos < 2){                       //Shifts to next state
-     speedpos = speedpos +1;
-     Serial.print("Shift: ");               //Debug: Shows what current Speed should be
-     Serial.println(myspeed[speedpos]);     //Shows to shift through speeds
+     speedpos = speedpos +1;                
+     Serial.print("Shift: ");                //Debug: Shows what current Speed should be
+     Serial.println(myspeed[speedpos]);      //Shows shift through speeds
     }
-    else if (speedpos = 2){                 //Resets to the start of the state array
+    else if (speedpos = 2){                  //Resets to the start of the state array
       speedpos = 0;
-      Serial.print("Reset: ");             //Debug: Shows the Speed reset
+      Serial.print("Reset: ");              //Debug: Shows the Speed reset
       Serial.println(myspeed[speedpos]);
     }
   }
 
+  //Motor Control
   if(myspeed[speedpos] == off){           //Turns motor off
     Serial.println("Off");                //Debug: Shows that the motor should turn off
+    analogWrite(enA, 0);                  //Stops Motor
+    
   }
   else if(myspeed[speedpos] == mid){     //Sets motor to half speed
-    Serial.println("Mid");              //Debug: Shows that the motor should be half speed
+    Serial.println("Mid");               //Debug: Shows that the motor should be half speed
+    analogWrite(enA, midspeed);          //Sends Motor midspeed
   }
   else if(myspeed[speedpos] == high){   //Sets motor to full speed
     Serial.println("High");             //Debug: Shows that the motor should be full speed
+    analogWrite(enA, highspeed);       //Sends Motor High Speed
   }
+
+  digitalWrite(in1, HIGH);             //Forwards Motion to H-Bridge
+  digitalWrite(in2, LOW);
 
   delay(150); //Covers for possible bounce
 }

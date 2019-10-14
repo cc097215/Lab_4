@@ -18,7 +18,7 @@ void loop() {
   
     inputindex++;                               //Moves to next array slot
   }
-  else if (inputindex = 1){
+  else if (inputindex == 1){
    char ch = Serial.read();
   
       if (ch =='\f')                               // sends forward code

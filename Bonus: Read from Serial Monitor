@@ -10,22 +10,29 @@ void loop() {
   static int inputindex = 0;                      //Keeps position in array
 
   // send data only when you receive data:
-  if (Serial.available() > 0) {
+  if (Serial.available() > 1) {
       
     input[inputindex] = Serial.read()-'0';       //Reads Input
     Serial.print("I received: ");                //Debug Prints
     Serial.println(input[inputindex]);
   
     inputindex++;                               //Moves to next array slot
-
-    if (inputindex == 3){                         //After array is full
+  }
+  else if (inputindex = 1){
+   char ch = Serial.read();
+  
+      if (ch =='\f')                               // sends forward code
+        Serial.print("Forward");
+      else if (ch == '\b')                         // sends backward code 
+        Serial.print("Backward"); 
+  }
+   else if (inputindex == 3){                         //After array is full
       for(int i=0; i<3; i++){                    //Prints all numbers in array
         Serial.print("I received in total: ");
         Serial.println(input[i]);
       }
     }
   
-    if (inputindex == 3)                      //Reset index
+    if (inputindex == 4)                      //Reset index
       inputindex = 0;
  }
-}

@@ -4,7 +4,7 @@ void setup() {
 }
 
 
-//Must input 4 chars ex. 001 for 1
+//Must input 3 chars ex. 001 for 1
 void loop() {
   static int input[] = {0, 0, 0, 0};              //For incoming serial data 4 spaces
   static int inputindex = 0;                      //Keeps position in array

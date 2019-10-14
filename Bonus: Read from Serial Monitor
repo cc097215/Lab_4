@@ -26,7 +26,7 @@ void loop() {
       else if (ch == '\b')                         // sends backward code 
         Serial.print("Backward"); 
   }
-   else if (inputindex == 3){                         //After array is full
+   else if (inputindex == 4){                         //After array is full
       for(int i=0; i<3; i++){                    //Prints all numbers in array
         Serial.print("I received in total: ");
         Serial.println(input[i]);

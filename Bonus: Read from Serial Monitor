@@ -10,7 +10,7 @@ void loop() {
   static int inputindex = 0;                      //Keeps position in array
 
   // send data only when you receive data:
-  if (Serial.available() > 1) {
+  if (Serial.available() > 0) {
       
     input[inputindex] = Serial.read()-'0';       //Reads Input
     Serial.print("I received: ");                //Debug Prints

@@ -1,3 +1,4 @@
+
 void setup() {
     Serial.begin(9600);
     Serial.println("This demo expects 2 pieces of data - text and an integer");
@@ -68,10 +69,13 @@ void loop() {
 
         newData = false;                                                    //Allows for new input
 
-        if(strcmp(messageFromPC, "Yes")==true){
+    char Yes = 'Y';
+    char No = 'N';
+
+        if(strcmp(messageFromPC, Yes) == true){
           Serial.println("Recieved: Yes");
         }
-        else if (strcmp(messageFromPC, "No")==false){
+        else if (strcmp(messageFromPC, No) == true){
           Serial.println("Recieved: No");
         }
     }

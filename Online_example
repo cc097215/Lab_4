@@ -1,13 +1,3 @@
-const byte numChars = 32;         //Size of Array
-char receivedChars[numChars];     //Recieved input
-char tempChars[numChars];        // temporary array for use when parsing
-
-      // variables to hold the parsed data
-char messageFromPC[numChars] = {0};
-static int integerFromPC = 0;
-
-static boolean newData = false;
-
 void setup() {
     Serial.begin(9600);
     Serial.println("This demo expects 2 pieces of data - text and an integer");
@@ -16,14 +6,27 @@ void setup() {
 }
 
 void loop() {
-    recvWithStartEndMarkers();                       //Reads from Serial Monitor
+    //Variables
+    static const byte numChars = 32;         //Size of Array
+    static char receivedChars[numChars];     //Recieved input
+    static char tempChars[numChars];        // temporary array for use when parsing
+    
+    //Variables to hold the parsed data
+    static char messageFromPC[numChars] = {0};
+    static int integerFromPC = 0;
+    static boolean newData = false;
+
+    
+    recvWithStartEndMarkers(numChars,receivedChars[numChars]);  //Reads from Serial Monitor
+    
     if (newData == true) {                           //Data is recorded
         strcpy(tempChars, receivedChars);
             // this temporary copy is necessary to protect the original data
             //   because strtok() used in parseData() replaces the commas with \0
-        parseData();                                //Split the data into its parts
-        showParsedData();                           //Updates User
-        newData = false;                            //Allows for new input
+            
+        parseData(messageFromPC[numChars], tempCjars[numChars]);                                 //Split the data into its parts
+        showParsedData(messageFromPC[numChars],integerFromPC);              //Updates User
+        newData = false;                                                    //Allows for new input
     }
 }
 

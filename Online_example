@@ -15,8 +15,8 @@ void loop() {
     static char messageFromPC[numChars] = {0};
     static int integerFromPC = 0;
     static boolean newData = false;
-
-    
+ 
+   
     recvWithStartEndMarkers(numChars,receivedChars[numChars]);  //Reads from Serial Monitor
     
     if (newData == true) {                           //Data is recorded
@@ -24,7 +24,7 @@ void loop() {
             // this temporary copy is necessary to protect the original data
             //   because strtok() used in parseData() replaces the commas with \0
             
-        parseData(messageFromPC[numChars], tempCjars[numChars]);                                 //Split the data into its parts
+        parseData(messageFromPC[numChars], tempChars[numChars]);                                 //Split the data into its parts
         showParsedData(messageFromPC[numChars],integerFromPC);              //Updates User
         newData = false;                                                    //Allows for new input
     }
@@ -32,7 +32,7 @@ void loop() {
 
 
 //Reads input into a string
-void recvWithStartEndMarkers() {
+void recvWithStartEndMarkers(const byte numChars, char receivedChars[numChars]) {
     static boolean recvInProgress = false;
     static byte ndx = 0;
     char startMarker = '<';                       //Start input character
@@ -65,7 +65,7 @@ void recvWithStartEndMarkers() {
 }
 
 //Split the data into its parts
-void parseData() {      
+void parseData(char messageFromPC[numChars], const byte numChars,char TempChars[numChars] ) {      
 
     char * strtokIndx;                       //strtok() index
 
@@ -78,7 +78,7 @@ void parseData() {
 }
 
 //Messages for user
-void showParsedData() {
+void showParsedData(char messageFromPC[numChars], const byte numChars, int integerFromPC) {
     Serial.print("Message ");
     Serial.println(messageFromPC);
     Serial.print("Integer ");

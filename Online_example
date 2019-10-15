@@ -1,5 +1,5 @@
-const byte numChars = 32;
-char receivedChars[numChars];
+const byte numChars = 32;         //Size of Array
+char receivedChars[numChars];     //Recieved input
 char tempChars[numChars];        // temporary array for use when parsing
 
       // variables to hold the parsed data
@@ -16,61 +16,65 @@ void setup() {
 }
 
 void loop() {
-    recvWithStartEndMarkers();
-    if (newData == true) {
+    recvWithStartEndMarkers();                       //Reads from Serial Monitor
+    if (newData == true) {                           //Data is recorded
         strcpy(tempChars, receivedChars);
             // this temporary copy is necessary to protect the original data
             //   because strtok() used in parseData() replaces the commas with \0
-        parseData();
-        showParsedData();
-        newData = false;
+        parseData();                                //Split the data into its parts
+        showParsedData();                           //Updates User
+        newData = false;                            //Allows for new input
     }
 }
 
+
+//Reads input into a string
 void recvWithStartEndMarkers() {
     static boolean recvInProgress = false;
     static byte ndx = 0;
-    char startMarker = '<';
-    char endMarker = '>';
-    char rc;
+    char startMarker = '<';                       //Start input character
+    char endMarker = '>';                         //End input character
+    char rc;                                      //Input from user
 
     while (Serial.available() > 0 && newData == false) {
-        rc = Serial.read();
+        rc = Serial.read();                                 //Reads input from Serial monitor
 
-        if (recvInProgress == true) {
+        if (recvInProgress == true) {                       //If input entered
             if (rc != endMarker) {
-                receivedChars[ndx] = rc;
+                receivedChars[ndx] = rc;                   //Converts to string
                 ndx++;
-                if (ndx >= numChars) {
+                if (ndx >= numChars) {                    //Stops reading if over char limit
                     ndx = numChars - 1;
                 }
             }
-            else {
-                receivedChars[ndx] = '\0'; // terminate the string
-                recvInProgress = false;
+            else {                                       //If end marker is read
+                receivedChars[ndx] = '\0';               //terminate the string
+                recvInProgress = false;                  //Resets for new input
                 ndx = 0;
-                newData = true;
+                newData = true;                         //Indicates data is ready for manipulation
             }
         }
 
         else if (rc == startMarker) {
-            recvInProgress = true;
+            recvInProgress = true;                    //Sets state to reading from input
         }
     }
 }
 
-void parseData() {      // split the data into its parts
+//Split the data into its parts
+void parseData() {      
 
-    char * strtokIndx; // this is used by strtok() as an index
+    char * strtokIndx;                       //strtok() index
 
-    strtokIndx = strtok(tempChars,",");      // get the first part - the string
-    strcpy(messageFromPC, strtokIndx);       // copy it to messageFromPC
+    strtokIndx = strtok(tempChars,",");      //Pulls all data before comma
+    strcpy(messageFromPC, strtokIndx);       //Copy it to dedicated word string
  
-    strtokIndx = strtok(NULL, ",");          // this continues where the previous call left off
-    integerFromPC = atoi(strtokIndx);        // convert this part to an integer
+    strtokIndx = strtok(NULL, ",");          // Converts comma to null
+    integerFromPC = atoi(strtokIndx);        // Converts after comma to integer
 
 }
 
+//Messages for user
 void showParsedData() {
     Serial.print("Message ");
     Serial.println(messageFromPC);

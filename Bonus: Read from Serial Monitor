@@ -1,28 +1,20 @@
-
-#define btn 6
-
 #define enA 10
 #define in1 9
 #define in2 8
 
 void setup() {
   Serial.begin(9600);
-
-   pinMode(btn, INPUT);
   
    pinMode(enA, OUTPUT);
    pinMode(in1, OUTPUT);
    pinMode(in2, OUTPUT);
   
-   Serial.println("Set-up Program 3");
+   Serial.println("Set-up Program Bonus");
 }
 
 void loop() {
-  static int prevbtnstate = false;
-
-  //Reads input from Serial Monitor - modified code from:
-  while(Reading == true){
-                //Variables
+  static bool Reading = true;
+  //Variables
             static const byte numChars = 32;         //Size of Array
             static char receivedChars[numChars];     //Recieved input
             static char tempChars[numChars];        // temporary array for use when parsing
@@ -38,6 +30,7 @@ void loop() {
             char endMarker = '>';                         //End input character
             char rc;                                      //Input from user
             
+  //Reads input from Serial Monitor - modified code from:
             while (Serial.available() > 0 && newData == false) {
                 rc = Serial.read();                                 //Reads input from Serial monitor
         
@@ -66,115 +59,44 @@ void loop() {
             // this temporary copy is necessary to protect the original data
             //   because strtok() used in parseData() replaces the commas with \0
 
-    //parseData function        
-    char * strtokIndx;                       //strtok() index
+                //parseData function        
+                char * strtokIndx;                       //strtok() index
+            
+                strtokIndx = strtok(tempChars,",");      //Pulls all data before comma
+                strcpy(messageFromPC, strtokIndx);       //Copy it to dedicated word string
+             
+                strtokIndx = strtok(NULL, ",");          // Converts comma to null
+                integerFromPC = atoi(strtokIndx);        // Converts after comma to integer
 
-    strtokIndx = strtok(tempChars,",");      //Pulls all data before comma
-    strcpy(messageFromPC, strtokIndx);       //Copy it to dedicated word string
- 
-    strtokIndx = strtok(NULL, ",");          // Converts comma to null
-    integerFromPC = atoi(strtokIndx);        // Converts after comma to integer
 
-
-    //showParsedData function
-    Serial.print("Message ");
-    Serial.println(messageFromPC);
-    Serial.print("Integer ");
-    Serial.println(integerFromPC);
+                //showParsedData function
+                Serial.print("Message ");
+                Serial.println(messageFromPC);
+                Serial.print("Integer ");
+                Serial.println(integerFromPC);
 
         newData = false;                                                    //Allows for new input
-        Reading = true;
       }
-    }
-  }
   
 
   analogWrite(enA, integerFromPC);                  //Send speed to h-bridge
   
   if (messageFromPC == "Forwards"){                 //Forwards indicated
-  Serial.println("SHIFT");                          //Debug print for button pressed
-  prevbtnstate = true;
-  
-  digitalWrite(in1, HIGH);                          //Forwards Motion to H-Bridge
-  digitalWrite(in2, LOW);
+      Serial.println("SHIFT");                          //Debug print for button pressed
+      
+      digitalWrite(in1, HIGH);                          //Forwards Motion to H-Bridge
+      digitalWrite(in2, LOW);
   }
  
-  else if (messageFromPC == "Backwards");          //Backwards indicated
-  Serial.println("NO SHIFT");                      //Debug print for button not pressed
-  prevbtnstate = false;
-  
-  digitalWrite(in1, LOW);                         //Backwards Motion to H-Bridge
-  digitalWrite(in2, HIGH);
+  else if (messageFromPC == "Backwards"){          //Backwards indicated
+      Serial.println("NO SHIFT");                      //Debug print for button not pressed
+    
+      digitalWrite(in1, LOW);                         //Backwards Motion to H-Bridge
+      digitalWrite(in2, HIGH);
   }
   else {
-    Serial.println("Error in Direction");          //Error Debug
+      Serial.println("Error in Direction");          //Error Debug
   }
 
   delay(200);                                      //Covers for possible bounce
-}
-
-void SerialMonitorRead(){
-      //Variables
-    static const byte numChars = 32;         //Size of Array
-    static char receivedChars[numChars];     //Recieved input
-    static char tempChars[numChars];        // temporary array for use when parsing
-    //Variables to hold the parsed data
-    static char messageFromPC[numChars] = {0};
-    static int integerFromPC = 0;
-    static boolean newData = false;
-
-    //recvWithStatEnd Markers function
-    static boolean recvInProgress = false;
-    static byte ndx = 0;
-    char startMarker = '<';                       //Start input character
-    char endMarker = '>';                         //End input character
-    char rc;                                      //Input from user
-    
-    while (Serial.available() > 0 && newData == false) {
-        rc = Serial.read();                                 //Reads input from Serial monitor
-
-        if (recvInProgress == true) {                       //If input entered
-            if (rc != endMarker) {
-                receivedChars[ndx] = rc;                   //Converts to string
-                ndx++;
-                if (ndx >= numChars) {                    //Stops reading if over char limit
-                    ndx = numChars - 1;
-                }
-            }
-            else {                                       //If end marker is read
-                receivedChars[ndx] = '\0';               //terminate the string
-                recvInProgress = false;                  //Resets for new input
-                ndx = 0;
-                newData = true;                         //Indicates data is ready for manipulation
-            }
-        }
-        else if (rc == startMarker) {
-            recvInProgress = true;                    //Sets state to reading from input
-        }
-    }
-    
-    if (newData == true) {                           //Data is recorded
-        strcpy(tempChars, receivedChars);
-            // this temporary copy is necessary to protect the original data
-            //   because strtok() used in parseData() replaces the commas with \0
-
-    //parseData function        
-    char * strtokIndx;                       //strtok() index
-
-    strtokIndx = strtok(tempChars,",");      //Pulls all data before comma
-    strcpy(messageFromPC, strtokIndx);       //Copy it to dedicated word string
- 
-    strtokIndx = strtok(NULL, ",");          // Converts comma to null
-    integerFromPC = atoi(strtokIndx);        // Converts after comma to integer
-
-
-    //showParsedData function
-    Serial.print("Message ");
-    Serial.println(messageFromPC);
-    Serial.print("Integer ");
-    Serial.println(integerFromPC);
-
-        newData = false;                                                    //Allows for new input
-    }
-}
 }

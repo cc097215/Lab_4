@@ -1,3 +1,4 @@
+
 void setup() {
     Serial.begin(9600);
     Serial.println("This demo expects 2 pieces of data - text and an integer");
@@ -17,22 +18,6 @@ void loop() {
     static boolean newData = false;
  
    
-    recvWithStartEndMarkers(numChars,receivedChars[numChars]);  //Reads from Serial Monitor
-    
-    if (newData == true) {                           //Data is recorded
-        strcpy(tempChars, receivedChars);
-            // this temporary copy is necessary to protect the original data
-            //   because strtok() used in parseData() replaces the commas with \0
-            
-        parseData(messageFromPC[numChars], tempChars[numChars]);                                 //Split the data into its parts
-        showParsedData(messageFromPC[numChars],integerFromPC);              //Updates User
-        newData = false;                                                    //Allows for new input
-    }
-}
-
-
-//Reads input into a string
-void recvWithStartEndMarkers(const byte numChars, char receivedChars[numChars]) {
     static boolean recvInProgress = false;
     static byte ndx = 0;
     char startMarker = '<';                       //Start input character
@@ -62,11 +47,13 @@ void recvWithStartEndMarkers(const byte numChars, char receivedChars[numChars]) 
             recvInProgress = true;                    //Sets state to reading from input
         }
     }
-}
+    
+    if (newData == true) {                           //Data is recorded
+        strcpy(tempChars, receivedChars);
+            // this temporary copy is necessary to protect the original data
+            //   because strtok() used in parseData() replaces the commas with \0
 
-//Split the data into its parts
-void parseData(char messageFromPC[numChars], const byte numChars,char TempChars[numChars] ) {      
-
+            
     char * strtokIndx;                       //strtok() index
 
     strtokIndx = strtok(tempChars,",");      //Pulls all data before comma
@@ -75,12 +62,11 @@ void parseData(char messageFromPC[numChars], const byte numChars,char TempChars[
     strtokIndx = strtok(NULL, ",");          // Converts comma to null
     integerFromPC = atoi(strtokIndx);        // Converts after comma to integer
 
-}
-
-//Messages for user
-void showParsedData(char messageFromPC[numChars], const byte numChars, int integerFromPC) {
     Serial.print("Message ");
     Serial.println(messageFromPC);
     Serial.print("Integer ");
     Serial.println(integerFromPC);
+
+        newData = false;                                                    //Allows for new input
+    }   
 }

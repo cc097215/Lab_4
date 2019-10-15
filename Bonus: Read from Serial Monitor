@@ -10,6 +10,8 @@ void setup() {
    pinMode(in2, OUTPUT);
   
    Serial.println("Set-up Program Bonus");
+   Serial.println("This program expects 2 pieces of data - text and an integer");
+   Serial.println("Enter data in this style <Forwards, 112>  ");
 }
 
 void loop() {
@@ -82,20 +84,17 @@ void loop() {
   analogWrite(enA, integerFromPC);                  //Send speed to h-bridge
   
   if (messageFromPC == "Forwards"){                 //Forwards indicated
-      Serial.println("SHIFT");                          //Debug print for button pressed
+      Serial.println("Forwards");                          //Debug print for button pressed
       
       digitalWrite(in1, HIGH);                          //Forwards Motion to H-Bridge
       digitalWrite(in2, LOW);
   }
  
   else if (messageFromPC == "Backwards"){          //Backwards indicated
-      Serial.println("NO SHIFT");                      //Debug print for button not pressed
+      Serial.println("Backwards");                      //Debug print for button not pressed
     
       digitalWrite(in1, LOW);                         //Backwards Motion to H-Bridge
       digitalWrite(in2, HIGH);
-  }
-  else {
-      Serial.println("Error in Direction");          //Error Debug
   }
 
   delay(200);                                      //Covers for possible bounce

@@ -12,7 +12,7 @@ void setup() {
    Serial.println("Set-up Program Bonus");
    Serial.println("This program expects 2 pieces of data - text and an integer");
    Serial.println("Enter data in this style <F, 112>  ");
-   Serial.println("Please enter F for forwards and B for backwards motion");
+   Serial.println("Please enter F for forwards and B for backwards motion. Note the speed is max at 255");
 }
 
 void loop() {
@@ -85,17 +85,19 @@ void loop() {
   analogWrite(enA, integerFromPC);                  //Send speed to h-bridge
   
   if (messageFromPC[0] == 'F'){                 //Forwards indicated
-      Serial.println("Forwards");                          //Debug print for button pressed
+      //Serial.println("Forwards");                          //Debug print for button pressed
       
       digitalWrite(in1, HIGH);                          //Forwards Motion to H-Bridge
       digitalWrite(in2, LOW);
+        delay(200);
   }
  
   else if (messageFromPC[0] == 'B'){          //Backwards indicated
-      Serial.println("Backwards");                      //Debug print for button not pressed
+      //Serial.println("Backwards");                      //Debug print for button not pressed
     
       digitalWrite(in1, LOW);                         //Backwards Motion to H-Bridge
       digitalWrite(in2, HIGH);
+        delay(200);
   }
 
   delay(200);                                      //Covers for possible bounce

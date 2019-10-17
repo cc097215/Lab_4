@@ -32,7 +32,7 @@ void loop() {
             char endMarker = '>';                         //End input character
             char rc;                                      //Input from user
             
-  //Reads input from Serial Monitor - modified code from:
+  //Reads input from Serial Monitor - modified code from: https://forum.arduino.cc/index.php?topic=396450.0
             while (Serial.available() > 0 && newData == false) {
                 rc = Serial.read();                                 //Reads input from Serial monitor
         
